@@ -32,8 +32,3 @@ variable "domain_name" {
   type    = string
   default = null
 }
-
-variable "ebs_volume_name" {
-  type    = string
-  default = "root"
-}

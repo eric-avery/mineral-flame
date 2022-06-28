@@ -16,8 +16,7 @@ module "asg" {
   launch_template_description = "Launch template for mineral-flame"
   update_default_version      = true
   user_data = base64encode(templatefile("${path.module}/userdata.tmpl", {
-    tmpl_name            = var.name,
-    tmpl_ebs_volume_name = var.ebs_volume_name
+    tmpl_name            = var.name
     }
     )
   )
@@ -25,7 +24,7 @@ module "asg" {
   image_id                 = data.aws_ami.amazon-linux-2.image_id
   instance_type            = var.instance_type
   iam_instance_profile_arn = aws_iam_instance_profile.mineral_flame_instance_profile.arn
-  ebs_optimized            = true
+  ebs_optimized            = false
   enable_monitoring        = true
 
   network_interfaces = [
@@ -41,5 +40,20 @@ module "asg" {
       ]
     }
   ]
+
+  block_device_mappings = [
+    {
+      # Root volume
+      device_name = "/dev/xvda"
+      no_device   = 0
+      ebs = {
+        delete_on_termination = true
+        encrypted             = false
+        volume_size           = 10
+        volume_type           = "gp2"
+      }
+    }
+  ]
 }
+
 
