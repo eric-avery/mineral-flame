@@ -25,5 +25,5 @@ data "aws_subnets" "public" {
 }
 
 output "aws_pub_subs" {
-  value = sort(tolist(aws_subnets.public.ids))
+  value = sort(tolist(data.aws_subnets.public.ids))
 }
