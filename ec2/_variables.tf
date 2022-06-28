@@ -1,6 +1,6 @@
 variable "name" {
   type    = string
-  default = "mineral-flame-asg"
+  default = "mineral-flame"
 }
 
 variable "instance_count" {
