@@ -22,6 +22,11 @@ data "aws_subnets" "public" {
     name   = "vpc-id"
     values = [data.aws_vpc.mineral-flame-vpc.id]
   }
+
+  filter {
+    name = "tag:Name"
+    values = ["${var.name}-private-${data.aws_region.current.name}*]
+  }
 }
 
 output "aws_pub_subs" {
