@@ -2,7 +2,7 @@ resource "aws_lb" "mineral_flame_alb" {
     name = "${var.name}-alb"
     internal = false
     load_balancer_type = "application"
-    subnets = [data.aws_subnets.public.ids[0],data.aws_subnets.public.ids[1],data.aws_subnets.public.ids[2]]
+    subnets = sort(tolist(data.aws_subnets.public.ids))
     security_groups = [
         aws_security_group.mineral_flame_alb_sg.id
     ]
