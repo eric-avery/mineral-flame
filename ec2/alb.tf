@@ -79,7 +79,7 @@ resource "aws_security_group" "mineral_flame_alb_sg" {
 }
 
 resource "aws_lb_target_group_attachment" "test" {
-for_each = sort(tolist(data.aws_instances.asg_instances.ids))
+for_each = toset(data.aws_instances.asg_instances.ids)
   target_group_arn = aws_lb_target_group.mineral_flame_tg.arn
   target_id        = each.value
   port             = 80
