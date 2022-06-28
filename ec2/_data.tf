@@ -23,9 +23,4 @@ data "aws_subnets" "public" {
     values = [data.aws_vpc.mineral-flame-vpc.id]
   }
 
-  filter {
-    name   = "tag:Name"
-    values = ["${var.name}-public-${data.aws_region.current.name}a"]
-  }
-
 }
