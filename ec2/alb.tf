@@ -22,7 +22,7 @@ resource "aws_lb_listener" "mineral_flame_listener" {
     port = 80
     protocol = "HTTP"
     default_action {
-        target_group_arn = aws_lb.mineral_flame_alb.arn
+        target_group_arn = aws_lb_target_group.mineral_flame_tg.arn
         type = "forward"
     }
 }
