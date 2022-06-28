@@ -1,0 +1,16 @@
+#!/bin/bash
+
+//install apache httpd
+yum update -y
+yum install -y httpd.x86_64
+systemctl start httpd.service
+systemctl enable httpd.service
+echo “Hello World from $(hostname -f)” > /var/www/html/index.html
+
+
+//install kubectl
+curl -o kubectl https://s3.us-west-2.amazonaws.com/amazon-eks/1.22.6/2022-03-09/bin/linux/amd64/kubectl
+chmod +x ./kubectl
+mkdir -p $HOME/bin && cp ./kubectl $HOME/bin/kubectl && export PATH=$PATH:$HOME/bin
+echo 'export PATH=$PATH:$HOME/bin' >> ~/.bashrc
+echo "$(kubectl version --short --client)" > /home/ec2-user/kubectl-version-check.txt
