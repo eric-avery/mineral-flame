@@ -15,7 +15,7 @@ module "asg" {
   launch_template_name        = "${var.name}-launch-template"
   launch_template_description = "Launch template for mineral-flame"
   update_default_version      = true
-  user_data_base64 = base64encode(templatefile("${path.module}/userdata.tmpl", {
+  user_data = base64encode(templatefile("${path.module}/userdata.tmpl", {
     tmpl_name            = var.name,
     tmpl_ebs_volume_name = var.ebs_volume_name
     }
