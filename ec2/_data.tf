@@ -29,6 +29,9 @@ data "aws_subnets" "public" {
   }
 }
 
-output "aws_pub_subs" {
-  value = sort(tolist(data.aws_subnets.public.ids))
+data "aws_instances" "asg_instances" {
+  instance_tags = {
+    Name = "mineral-flame"
+  }
+  instance_state_names = ["running"]
 }
