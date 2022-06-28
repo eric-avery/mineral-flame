@@ -1,19 +1,3 @@
-resource "aws_eks_cluster" "EKSCluster" {
-    name = "mf-cluster"
-    role_arn = "arn:aws:iam::686014939614:role/mf-cluster-role"
-    version = "1.22"
-    vpc_config {
-        security_group_ids = [
-            "sg-0832de8fd085fbc5a"
-        ]
-        subnet_ids = [
-            "subnet-03f764dd4f39eb8a0",
-            "subnet-0387226499b546a79",
-            "subnet-0622239ec5b360273"
-        ]
-    }
-}
-
 module "eks" {
   source = "../.."
 
@@ -96,9 +80,9 @@ module "eks" {
 
       subnet_ids = sort(tolist(data.aws_subnets.private.ids))
 
-      min_size     = 1
+      min_size     = 3
       max_size     = 7
-      desired_size = 1
+      desired_size = 3
 
       ami_id                     = data.aws_ami.eks_default.image_id
       enable_bootstrap_user_data = true
@@ -110,16 +94,12 @@ module "eks" {
       EOT
 
       post_bootstrap_user_data = <<-EOT
-      echo "you are free little kubelet!"
+      echo "kubelet power!"
       EOT
 
       capacity_type        = "SPOT"
       force_update_version = true
-      instance_types       = ["m6i.large", "m5.large", "m5n.large", "m5zn.large"]
-      labels = {
-        GithubRepo = "terraform-aws-eks"
-        GithubOrg  = "terraform-aws-modules"
-      }
+      instance_types       = ["t2.micro"]
 
       taints = [
         {
@@ -130,13 +110,13 @@ module "eks" {
       ]
 
       update_config = {
-        max_unavailable_percentage = 50 # or set `max_unavailable`
+        max_unavailable_percentage = 50
       }
 
-      description = "EKS managed node group example launch template"
+      description = "EKS managed node group"
 
       ebs_optimized           = true
-      vpc_security_group_ids  = [aws_security_group.additional.id]
+      vpc_security_group_ids  = [data.aws_security_group.selected.id]
       disable_api_termination = false
       enable_monitoring       = true
 
@@ -163,59 +143,45 @@ module "eks" {
       }
 
       create_iam_role          = true
-      iam_role_name            = "eks-managed-node-group-complete-example"
+      iam_role_name            = "eks-managed-node-group-iam-role"
       iam_role_use_name_prefix = false
-      iam_role_description     = "EKS managed node group complete example role"
+      iam_role_description     = "EKS managed node group role"
       iam_role_tags = {
-        Purpose = "Protector of the kubelet"
+        Purpose = "kubelet protector"
       }
       iam_role_additional_policies = [
         "arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryReadOnly"
       ]
 
       create_security_group          = true
-      security_group_name            = "eks-managed-node-group-complete-example"
+      security_group_name            = "eks-managed-node-group-sg"
       security_group_use_name_prefix = false
-      security_group_description     = "EKS managed node group complete example security group"
+      security_group_description     = "EKS managed node group sg"
       security_group_rules = {
-        phoneOut = {
-          description = "Hello CloudFlare"
+        out = {
+          description = "Hello outside world"
           protocol    = "udp"
           from_port   = 53
           to_port     = 53
           type        = "egress"
           cidr_blocks = ["1.1.1.1/32"]
         }
-        phoneHome = {
-          description                   = "Hello cluster"
+        home = {
+          description                   = "Hello inside world"
           protocol                      = "udp"
           from_port                     = 53
           to_port                       = 53
           type                          = "egress"
-          source_cluster_security_group = true # bit of reflection lookup
+          source_cluster_security_group = true 
         }
       }
       security_group_tags = {
-        Purpose = "Protector of the kubelet"
+        Purpose = "kubelet protector"
       }
 
       tags = {
-        ExtraTag = "EKS managed node group complete example"
+        ExtraTag = "EKS managed node group"
       }
     }
   }
-
-  tags = local.tags
-}
-
-# References to resources that do not exist yet when creating a cluster will cause a plan failure due to https://github.com/hashicorp/terraform/issues/4149
-# There are two options users can take
-# 1. Create the dependent resources before the cluster => `terraform apply -target <your policy or your security group> and then `terraform apply`
-#   Note: this is the route users will have to take for adding additonal security groups to nodes since there isn't a separate "security group attachment" resource
-# 2. For addtional IAM policies, users can attach the policies outside of the cluster definition as demonstrated below
-resource "aws_iam_role_policy_attachment" "additional" {
-  for_each = module.eks.eks_managed_node_groups
-
-  policy_arn = aws_iam_policy.node_additional.arn
-  role       = each.value.iam_role_name
 }

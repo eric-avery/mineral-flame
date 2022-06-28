@@ -28,15 +28,6 @@ module "asg" {
   ebs_optimized            = true
   enable_monitoring        = true
 
-  instance_market_options = {
-    market_type = "spot"
-    spot_options = {
-      instance_interruption_behavior = var.instance_interruption_behavior
-      spot_instance_type             = var.spot_instance_type
-      max_price                      = "0.1"
-    }
-  }
-
   network_interfaces = [
     {
       associate_public_ip_address = true
@@ -73,28 +64,5 @@ module "asg" {
       recurrence       = "30 03 * * *" # Every night at 10:30pm CT/ 3:30am UTC
     }
   }
-
-  tag_specifications = [
-    {
-      resource_type = "volume"
-      tags          = { Name = "${var.name}-root-volume" }
-    },
-    {
-      resource_type = "volume"
-      tags          = merge({ Billing = title(var.name) })
-    },
-        {
-      resource_type = "volume"
-      tags          = merge({ ProvisionedBy = "Terraform" })
-    },
-        {
-      resource_type = "volume"
-      tags          = merge({ Owner = "EAvery" })
-    },
-        {
-      resource_type = "volume"
-      tags          = merge({ Project = title(var.name) })
-    }
-  ]
 }
 
