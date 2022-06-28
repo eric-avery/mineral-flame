@@ -22,5 +22,8 @@ data "aws_subnets" "public" {
     name   = "vpc-id"
     values = [data.aws_vpc.mineral-flame-vpc.id]
   }
+}
 
+output "aws_pub_subs" {
+  value = sort(tolist(aws_subnets.public.ids))
 }

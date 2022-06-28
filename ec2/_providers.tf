@@ -1,4 +1,11 @@
 terraform {
+  cloud {
+    organization = "ericmckennaavery"
+    workspaces {
+      name = "foundry-cloudfront"
+    }
+  }
+
   required_providers {
     aws = {
       source = "hashicorp/aws"
