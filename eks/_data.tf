@@ -1,21 +1,21 @@
 data "aws_region" "current" {}
 data "aws_caller_identity" "current" {}
 
-data "aws_iam_policy_document" "bucket_policy" {
-  statement {
-    effect = "Allow"
+data "aws_vpc" "mineral-flame-vpc" {
+  filter {
+    name   = "tag:Name"
+    values = ["${var.name}-vpc"]
+  }
+}
 
-    principals {
-      type        = "*"
-      identifiers = ["*"]
-    }
+data "aws_subnets" "private" {
+  filter {
+    name   = "vpc-id"
+    values = [data.aws_vpc.mineral-flame-vpc.id]
+  }
 
-    actions = [
-      "s3:GetObject"
-    ]
-
-    resources = [
-      "arn:aws:s3:::${var.name}-${var.bucket_name}/*"
-    ]
+  filter {
+    name = "tag:Name"
+    values = ["${var.name}-vpc-private-${data.aws_region.current.name}*"]
   }
 }
