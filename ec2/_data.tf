@@ -25,7 +25,7 @@ data "aws_subnets" "public" {
 
   filter {
     name = "tag:Name"
-    values = ["${var.name}-private-${data.aws_region.current.name}*]
+    values = ["${var.name}-private-${data.aws_region.current.name}*"]
   }
 }
 
