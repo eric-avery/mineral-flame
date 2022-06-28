@@ -7,7 +7,7 @@ module "asg" {
   min_size                  = var.instance_count
   max_size                  = var.instance_count_max
   desired_capacity          = var.instance_count
-  key_name                  = aws_key_pair.kp.name
+  key_name                  = aws_key_pair.kp.key_name
   wait_for_capacity_timeout = 0
   health_check_type         = "EC2"
   vpc_zone_identifier       = data.aws_subnets.public.ids
