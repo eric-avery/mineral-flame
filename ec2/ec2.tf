@@ -41,28 +41,5 @@ module "asg" {
       ]
     }
   ]
-
-  block_device_mappings = [
-    {
-      # Root volume
-      device_name = "/dev/xvda"
-      no_device   = 0
-      ebs = {
-        delete_on_termination = true
-        encrypted             = true
-        volume_size           = 20
-        volume_type           = "gp2"
-      }
-    }
-  ]
-
-  schedules = {
-    nightly_scale_down = {
-      min_size         = 0
-      max_size         = 0
-      desired_capacity = 0
-      recurrence       = "30 03 * * *" # Every night at 10:30pm CT/ 3:30am UTC
-    }
-  }
 }
 

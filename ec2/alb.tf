@@ -58,7 +58,7 @@ resource "aws_security_group" "mineral_flame_alb_sg" {
         protocol = "tcp"
         to_port = 80
     }
-    ingress {
+    ingress { # provision for 443 not yet active
         cidr_blocks = [
             "0.0.0.0/0"
         ]
