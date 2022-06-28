@@ -3,7 +3,7 @@ module "https_443_security_group" {
   version             = "~> 4.0"
   name                = "${var.name}-https-sg"
   description         = "Security group with HTTPS ports open for everybody (IPv4 CIDR), egress ports are all world open"
-  vpc_id              = data.aws_vpc.mineral-flame.id
+  vpc_id              = data.aws_vpc.mineral-flame-vpc.id
   ingress_cidr_blocks = ["0.0.0.0/0"]
 }
 
@@ -12,7 +12,7 @@ module "http_80_security_group" {
   version             = "~> 4.0"
   name                = "${var.name}-http-sg"
   description         = "Security group with HTTP ports open for everybody (IPv4 CIDR), egress ports are all world open"
-  vpc_id              = data.aws_vpc.mineral-flame.id
+  vpc_id              = data.aws_vpc.mineral-flame-vpc.id
   ingress_cidr_blocks = ["0.0.0.0/0"]
 }
 
@@ -21,7 +21,7 @@ module "ssh_security_group" {
   version             = "4.9.0"
   name                = "${var.name}-ssh-sg"
   description         = "Security group that enables ssh"
-  vpc_id              = data.aws_vpc.mineral-flame.id
+  vpc_id              = data.aws_vpc.mineral-flame-vpc.id
   ingress_cidr_blocks = ["0.0.0.0/0"]
 }
 

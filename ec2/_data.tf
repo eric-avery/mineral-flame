@@ -20,7 +20,7 @@ data "aws_vpc" "mineral-flame-vpc" {
 data "aws_subnets" "public" {
   filter {
     name   = "vpc-id"
-    values = [data.aws_vpc.mineral-flame.id]
+    values = [data.aws_vpc.mineral-flame-vpc.id]
   }
 
   filter {

@@ -41,7 +41,7 @@ resource "aws_lb_target_group" "mineral_flame_tg" {
     port = 80
     protocol = "HTTP"
     target_type = "instance"
-    vpc_id = data.aws_vpc.mineral-flame.id
+    vpc_id = data.aws_vpc.mineral-flame-vpc.id
     name = "mineral-flame-tg"
 }
 
@@ -49,7 +49,7 @@ resource "aws_security_group" "mineral_flame_alb_sg" {
     description = "SG for the mineral-flame alb"
     name = "${var.name}-alb-sg"
     
-    vpc_id = data.aws_vpc.mineral-flame.id
+    vpc_id = data.aws_vpc.mineral-flame-vpc.id
     ingress {
         cidr_blocks = [
             "0.0.0.0/0"
