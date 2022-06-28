@@ -18,7 +18,7 @@ module "http_80_security_group" {
 
 module "ssh_security_group" {
   source              = "terraform-aws-modules/security-group/aws//modules/ssh"
-  version             = "~> 4.9.0"
+  version             = "~> 4.0"
   name                = "${var.name}-ssh-sg"
   description         = "Security group that enables ssh"
   vpc_id              = data.aws_vpc.mineral-flame.id
