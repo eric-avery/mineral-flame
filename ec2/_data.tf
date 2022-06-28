@@ -10,7 +10,7 @@ data "aws_ami" "amazon-linux-2" {
   }
 }
 
-data "aws_vpc" "mineral-flame" {
+data "aws_vpc" "mineral-flame-vpc" {
   filter {
     name   = "tag:Name"
     values = [var.name]
