@@ -1,3 +1,5 @@
+//to-do convert to tf module for aws
+
 resource "aws_lb" "mineral_flame_alb" {
    name = "${var.name}-alb"
     internal = false
